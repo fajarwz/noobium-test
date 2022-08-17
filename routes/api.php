@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Me\ProfileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Me\CategoryController as MeCategoryController;
+use App\Http\Controllers\Me\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,10 +24,12 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 
 Route::middleware('auth:api')->group(function ()
 {
-    Route::prefix('/me')->group(function () {
+    Route::prefix('/me')->group(function ()
+    {
         Route::get('/profile', [ProfileController::class, 'show'])->name('me.profile.show');
         Route::put('/profile', [ProfileController::class, 'update'])->name('me.profile.update');
 
+        Route::get('/categories', [MeCategoryController::class, 'index'])->name('me.categories.index');
     });
 
     Route::post('/sign-out', [AuthController::class, 'signOut'])->name('auth.sign-out');
