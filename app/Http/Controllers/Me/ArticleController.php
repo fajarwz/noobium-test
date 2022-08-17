@@ -12,9 +12,11 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::with('category')->where('user_id', auth()->id())->get([
+        $articles = Article::with('category')->select([
             'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
-        ]);
+        ])
+        ->where('user_id', auth()->id())
+        ->paginate();
 
         return response()->json([
             'meta' => [
