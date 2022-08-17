@@ -22,21 +22,22 @@ use Illuminate\Support\Facades\Route;
 Route::post('/sign-up', [AuthController::class, 'signUp'])->name('sign-up');
 Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign-in');
 
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::get('/categories', [CategoryController::class, 'index']);
 
 Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles/{slug}', [ArticleController::class, 'show']);
 
 Route::middleware('auth:api')->group(function ()
 {
     Route::prefix('/me')->group(function ()
     {
-        Route::get('/profile', [ProfileController::class, 'show'])->name('me.profile.show');
-        Route::put('/profile', [ProfileController::class, 'update'])->name('me.profile.update');
+        Route::get('/profile', [ProfileController::class, 'show']);
+        Route::put('/profile', [ProfileController::class, 'update']);
 
-        Route::get('/categories', [MeCategoryController::class, 'index'])->name('me.categories.index');
+        Route::get('/categories', [MeCategoryController::class, 'index']);
 
         Route::apiResource('articles', MeArticleController::class);
     });
 
-    Route::post('/sign-out', [AuthController::class, 'signOut'])->name('auth.sign-out');
+    Route::post('/sign-out', [AuthController::class, 'signOut']);
 });

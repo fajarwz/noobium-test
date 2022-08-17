@@ -38,4 +38,32 @@ class ArticleController extends Controller
             'data' => $articles,
         ]);
     }
+
+    public function show($slug)
+    {
+        $article = Article::with('category')->select([
+            'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
+        ])->where('slug', $slug)->first();
+
+        if ($article)
+        {
+            return response()->json([
+                'meta' => [
+                    'code' => 200,
+                    'status' => 'success',
+                    'message' => 'Article fetched successfully.',
+                ],
+                'data' => $article,
+            ]);    
+        }
+
+        return response()->json([
+            'meta' => [
+                'code' => 404,
+                'status' => 'error',
+                'message' => 'Article not found.',
+            ],
+            'data' => [],
+        ], 404);
+    }
 }
