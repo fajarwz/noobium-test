@@ -2,10 +2,15 @@
 
 namespace App\Http\Requests\Me\Article;
 
+use App\Models\Category;
+use App\Traits\ErrorResponseJson;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
+    use ErrorResponseJson;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,10 +29,22 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_id' => 'required|',
+            'category_id' => 'required|' . Rule::in(Category::pluck('id')),
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'featured_image' => 'required|image|mimes:jpg,bmp,png',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'category_id' => 'category',
         ];
     }
 }

@@ -20,7 +20,12 @@ class Article extends Model
         'title',
         'slug',
         'content_preview',
-        'preview',
+        'content',
         'featured_image',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Me\CategoryController as MeCategoryController;
 use App\Http\Controllers\Me\ProfileController;
+use App\Http\Controllers\Me\ArticleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +31,8 @@ Route::middleware('auth:api')->group(function ()
         Route::put('/profile', [ProfileController::class, 'update'])->name('me.profile.update');
 
         Route::get('/categories', [MeCategoryController::class, 'index'])->name('me.categories.index');
+
+        Route::post('/articles', [ArticleController::class, 'store'])->name('me.articles.store');
     });
 
     Route::post('/sign-out', [AuthController::class, 'signOut'])->name('auth.sign-out');
