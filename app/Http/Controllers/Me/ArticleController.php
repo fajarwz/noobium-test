@@ -122,28 +122,41 @@ class ArticleController extends Controller
 
         if($article)
         {
-            $updateArticle = $article->update($validated);
-
-            if ($updateArticle)
+            if($article->user_id === $userId)
             {
+                $updateArticle = $article->update($validated);
+    
+                if ($updateArticle)
+                {
+                    return response()->json([
+                        'meta' => [
+                            'code' => 200,
+                            'status' => 'success',
+                            'message' => 'Article updated successfully.',
+                        ],
+                        'data' => [],
+                    ]);
+                }
+
                 return response()->json([
                     'meta' => [
-                        'code' => 200,
-                        'status' => 'success',
-                        'message' => 'Article updated successfully.',
+                        'code' => 500,
+                        'status' => 'error',
+                        'message' => 'Error! Article failed to update.',
                     ],
                     'data' => [],
-                ]);
+                ], 500);
             }
-
+            
             return response()->json([
                 'meta' => [
-                    'code' => 500,
+                    'code' => 401,
                     'status' => 'error',
-                    'message' => 'Error! Article failed to update.',
+                    'message' => 'Unauthorized.',
                 ],
                 'data' => [],
-            ], 500);
+            ], 401);
+            
         }
 
         return response()->json([
