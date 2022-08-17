@@ -21,6 +21,7 @@ Route::middleware('auth:api')->group(function ()
 {
     Route::prefix('/me')->group(function () {
         Route::get('/profile', [ProfileController::class, 'show'])->name('me.profile.show');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('me.profile.update');
     });
 
     Route::post('/sign-out', [AuthController::class, 'signOut'])->name('auth.sign-out');
