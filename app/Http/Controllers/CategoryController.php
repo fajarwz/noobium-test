@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Category;
 
 class CategoryController extends Controller
@@ -20,5 +19,41 @@ class CategoryController extends Controller
             ],
             'data' => $categories,
         ]);
-    } 
+    }
+
+    public function show($categorySlug)
+    {
+        $category = Category::where('slug', $categorySlug)->first();
+
+        if ($category)
+        {
+            $articles = Category::find($category->id)->articles()->get();
+
+            return response()->json([
+                'meta' => [
+                    'code' => 200,
+                    'status' => 'success',
+                    'message' => 'Articles fetched successfully.',
+                ],
+                'data' => [
+                    'category' => [
+                        'name' => $category->name,
+                        'slug' => $category->slug,
+                    ],
+                    'articles' => $articles,
+                ],
+            ]);
+
+        }
+
+        return response()->json([
+            'meta' => [
+                'code' => 404,
+                'status' => 'error',
+                'message' => 'Category not found.',
+            ],
+            'data' => [],
+        ], 404);
+        
+    }
 }

@@ -23,6 +23,7 @@ Route::post('/sign-up', [AuthController::class, 'signUp'])->name('sign-up');
 Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign-in');
 
 Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{categorySlug}', [CategoryController::class, 'show']);
 
 Route::get('/articles', [ArticleController::class, 'index']);
 Route::get('/articles/{slug}', [ArticleController::class, 'show']);
