@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Me;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Me\Article\StoreRequest;
+use App\Http\Requests\Me\Article\UpdateRequest;
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -13,7 +14,7 @@ class ArticleController extends Controller
     public function index()
     {
         $userId = auth()->id();
-        
+
         $articles = Article::with('category')->select([
             'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
         ])
@@ -35,13 +36,10 @@ class ArticleController extends Controller
         $userId = auth()->id();
         $validated = $request->validated();
 
-        $validated['slug'] = Str::of($validated['title'])->slug('-');
+        $validated['slug'] = Str::of($validated['title'])->slug('-') . '-' . time();
         $validated['content_preview'] = substr($validated['content'], 0, 218) . '...';
 
-        if ($request->hasFile('featured_image'))
-        {
-            $validated['featured_image'] = $request->file('featured_image')->store('article/featured-image', 'public');
-        }
+        $validated['featured_image'] = $request->file('featured_image')->store('article/featured-image', 'public');
 
         $createArticle = User::find($userId)->articles()->create($validated);
 
@@ -105,5 +103,56 @@ class ArticleController extends Controller
             'data' => [],
         ], 404);
 
+    }
+
+    public function update(UpdateRequest $request, $id)
+    {
+        $userId = auth()->id();
+        $validated = $request->validated();
+
+        $validated['slug'] = Str::of($validated['title'])->slug('-') . '-' . time();
+        $validated['content_preview'] = substr($validated['content'], 0, 218) . '...';
+
+        if ($request->hasFile('featured_image'))
+        {
+            $validated['featured_image'] = $request->file('featured_image')->store('article/featured-image', 'public');
+        }
+
+        $article = Article::find($id);
+
+        if($article)
+        {
+            $updateArticle = $article->update($validated);
+
+            if ($updateArticle)
+            {
+                return response()->json([
+                    'meta' => [
+                        'code' => 200,
+                        'status' => 'success',
+                        'message' => 'Article updated successfully.',
+                    ],
+                    'data' => [],
+                ]);
+            }
+
+            return response()->json([
+                'meta' => [
+                    'code' => 500,
+                    'status' => 'error',
+                    'message' => 'Error! Article failed to update.',
+                ],
+                'data' => [],
+            ], 500);
+        }
+
+        return response()->json([
+            'meta' => [
+                'code' => 404,
+                'status' => 'error',
+                'message' => 'Article not found.',
+            ],
+            'data' => [],
+        ], 404);
     }
 }
