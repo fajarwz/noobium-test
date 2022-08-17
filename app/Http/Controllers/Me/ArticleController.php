@@ -12,7 +12,9 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $article = Article::where('user_id', auth()->id())->get();
+        $articles = Article::with('category')->where('user_id', auth()->id())->get([
+            'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
+        ]);
 
         return response()->json([
             'meta' => [
@@ -20,13 +22,7 @@ class ArticleController extends Controller
                 'status' => 'success',
                 'message' => 'Articles fetched successfully.',
             ],
-            'data' => [
-                'title' => $article->title,
-                'slug' => $article->slug,
-                'content_preview' => $article->content_preview,
-                'content' => $article->content,
-                'featured_image' => $article->featured_image,
-            ],
+            'data' => $articles,
         ]);
     }
 

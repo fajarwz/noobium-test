@@ -32,6 +32,7 @@ Route::middleware('auth:api')->group(function ()
 
         Route::get('/categories', [MeCategoryController::class, 'index'])->name('me.categories.index');
 
+        Route::get('/articles', [ArticleController::class, 'index'])->name('me.articles.index');
         Route::post('/articles', [ArticleController::class, 'store'])->name('me.articles.store');
     });
 
