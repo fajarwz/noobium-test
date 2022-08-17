@@ -15,11 +15,12 @@ class Article extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'picture',
-        'social_id',
-        'social_type',
+        'user_id',
+        'category_id',
+        'title',
+        'slug',
+        'content_preview',
+        'preview',
+        'featured_image',
     ];
 }
