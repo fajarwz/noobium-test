@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Me\ArticleController as MeArticleController;
 use App\Http\Controllers\Me\CategoryController as MeCategoryController;
 use App\Http\Controllers\Me\ProfileController;
-use App\Http\Controllers\Me\ArticleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,8 @@ Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign-in');
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 
+Route::get('/articles', [ArticleController::class, 'index']);
+
 Route::middleware('auth:api')->group(function ()
 {
     Route::prefix('/me')->group(function ()
@@ -32,7 +35,7 @@ Route::middleware('auth:api')->group(function ()
 
         Route::get('/categories', [MeCategoryController::class, 'index'])->name('me.categories.index');
 
-        Route::apiResource('articles', ArticleController::class);
+        Route::apiResource('articles', MeArticleController::class);
     });
 
     Route::post('/sign-out', [AuthController::class, 'signOut'])->name('auth.sign-out');
