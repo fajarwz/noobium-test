@@ -18,8 +18,8 @@ class ArticleController extends Controller
         $articles = Article::with('category')->select([
             'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
         ])
-        ->where('user_id', $userId)
-        ->paginate();
+            ->where('user_id', $userId)
+            ->paginate();
 
         return response()->json([
             'meta' => [
@@ -70,9 +70,9 @@ class ArticleController extends Controller
         $article = Article::find($id);
         $userId = auth()->id();
 
-        if($article)
+        if ($article)
         {
-            if($article->user_id === $userId)
+            if ($article->user_id === $userId)
             {
                 return response()->json([
                     'meta' => [
@@ -83,7 +83,7 @@ class ArticleController extends Controller
                     'data' => $article,
                 ]);
             }
-    
+
             return response()->json([
                 'meta' => [
                     'code' => 401,
@@ -120,12 +120,12 @@ class ArticleController extends Controller
 
         $article = Article::find($id);
 
-        if($article)
+        if ($article)
         {
-            if($article->user_id === $userId)
+            if ($article->user_id === $userId)
             {
                 $updateArticle = $article->update($validated);
-    
+
                 if ($updateArticle)
                 {
                     return response()->json([
@@ -147,7 +147,7 @@ class ArticleController extends Controller
                     'data' => [],
                 ], 500);
             }
-            
+
             return response()->json([
                 'meta' => [
                     'code' => 401,
@@ -156,7 +156,60 @@ class ArticleController extends Controller
                 ],
                 'data' => [],
             ], 401);
-            
+
+        }
+
+        return response()->json([
+            'meta' => [
+                'code' => 404,
+                'status' => 'error',
+                'message' => 'Article not found.',
+            ],
+            'data' => [],
+        ], 404);
+    }
+
+    public function destroy($id)
+    {
+        $userId = auth()->id();
+        $article = Article::find($id);
+
+        if ($article)
+        {
+            if ($article->user_id === $userId)
+            {
+                $deleteArticle = $article->delete();
+
+                if ($deleteArticle)
+                {
+                    return response()->json([
+                        'meta' => [
+                            'code' => 200,
+                            'status' => 'success',
+                            'message' => 'Article deleted successfully.',
+                        ],
+                        'data' => [],
+                    ]);
+                }
+
+                return response()->json([
+                    'meta' => [
+                        'code' => 500,
+                        'status' => 'error',
+                        'message' => 'Error! Article failed to delete.',
+                    ],
+                    'data' => [],
+                ], 500);
+            }
+
+            return response()->json([
+                'meta' => [
+                    'code' => 401,
+                    'status' => 'error',
+                    'message' => 'Unauthorized.',
+                ],
+                'data' => [],
+            ], 401);
         }
 
         return response()->json([
