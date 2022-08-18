@@ -13,18 +13,14 @@ class ArticleController extends Controller
 
         if ($searchQuery !== null)
         {
-            $articles = Article::with(['category', 'user:id,name,email,picture'])->select([
-                'user_id', 'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
-            ])
+            $articles = Article::with(['category', 'user:id,name,email,picture'])
                 ->where('title', 'like', '%' . $searchQuery . '%')
                 ->paginate()
             ;
         }
         else
         {
-            $articles = Article::with(['category', 'user:id,name,email,picture'])->select([
-                'user_id', 'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
-            ])
+            $articles = Article::with(['category', 'user:id,name,email,picture'])
                 ->paginate()
             ;
         }
@@ -41,9 +37,10 @@ class ArticleController extends Controller
 
     public function show($slug)
     {
-        $article = Article::with(['category', 'user:id,name,email,picture'])->select([
-            'user_id', 'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
-        ])->where('slug', $slug)->first();
+        $article = Article::with(['category', 'user:id,name,email,picture'])
+            ->where('slug', $slug)
+            ->first()
+        ;
 
         if ($article)
         {
