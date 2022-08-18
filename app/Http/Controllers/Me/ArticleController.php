@@ -67,7 +67,7 @@ class ArticleController extends Controller
 
     public function show($id)
     {
-        $article = Article::find($id);
+        $article = Article::with(['category', 'user:id,name,picture'])->find($id);
         $userId = auth()->id();
 
         if ($article)
@@ -78,7 +78,7 @@ class ArticleController extends Controller
                     'meta' => [
                         'code' => 200,
                         'status' => 'success',
-                        'message' => 'Article created successfully.',
+                        'message' => 'Article fetched successfully.',
                     ],
                     'data' => $article,
                 ]);
