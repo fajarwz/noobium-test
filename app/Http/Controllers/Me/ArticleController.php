@@ -15,8 +15,8 @@ class ArticleController extends Controller
     {
         $userId = auth()->id();
 
-        $articles = Article::with('category')->select([
-            'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
+        $articles = Article::with(['category', 'user:id,name,email,picture'])->select([
+            'user_id', 'category_id', 'title', 'slug', 'content_preview', 'featured_image', 'created_at', 'updated_at'
         ])
             ->where('user_id', $userId)
             ->paginate();
