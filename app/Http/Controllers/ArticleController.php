@@ -41,8 +41,8 @@ class ArticleController extends Controller
 
     public function show($slug)
     {
-        $article = Article::with('category')->select([
-            'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
+        $article = Article::with(['category', 'user:id,name,email,picture'])->select([
+            'user_id', 'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
         ])->where('slug', $slug)->first();
 
         if ($article)
