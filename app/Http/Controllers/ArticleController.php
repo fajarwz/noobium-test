@@ -13,8 +13,8 @@ class ArticleController extends Controller
 
         if ($searchQuery !== null)
         {
-            $articles = Article::with('category')->select([
-                'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
+            $articles = Article::with(['category', 'user:id,name,email,picture'])->select([
+                'user_id', 'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
             ])
                 ->where('title', 'like', '%' . $searchQuery . '%')
                 ->paginate()
@@ -22,8 +22,8 @@ class ArticleController extends Controller
         }
         else
         {
-            $articles = Article::with('category')->select([
-                'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
+            $articles = Article::with(['category', 'user:id,name,email,picture'])->select([
+                'user_id', 'category_id', 'title', 'slug', 'content_preview', 'content', 'featured_image',
             ])
                 ->paginate()
             ;
@@ -54,7 +54,7 @@ class ArticleController extends Controller
                     'message' => 'Article fetched successfully.',
                 ],
                 'data' => $article,
-            ]);    
+            ]);
         }
 
         return response()->json([
