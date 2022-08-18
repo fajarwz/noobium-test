@@ -30,6 +30,9 @@ class CategoryController extends Controller
             $articles = Category::find($category->id)
                 ->articles()
                 ->with(['category', 'user:id,name,picture'])
+                ->select([
+                    'user_id', 'category_id', 'title', 'slug', 'content_preview', 'featured_image', 'created_at', 'updated_at'
+                ])
                 ->paginate()
             ;
 
