@@ -14,6 +14,9 @@ class ArticleController extends Controller
         if ($searchQuery !== null)
         {
             $articles = Article::with(['category', 'user:id,name,email,picture'])
+                ->select([
+                    'user_id', 'category_id', 'title', 'slug', 'content_preview', 'featured_image', 'created_at', 'updated_at'
+                ])
                 ->where('title', 'like', '%' . $searchQuery . '%')
                 ->paginate()
             ;
@@ -21,6 +24,9 @@ class ArticleController extends Controller
         else
         {
             $articles = Article::with(['category', 'user:id,name,email,picture'])
+                ->select([
+                    'user_id', 'category_id', 'title', 'slug', 'content_preview', 'featured_image', 'created_at', 'updated_at'
+                ])
                 ->paginate()
             ;
         }
