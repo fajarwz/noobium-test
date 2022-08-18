@@ -27,7 +27,11 @@ class CategoryController extends Controller
 
         if ($category)
         {
-            $articles = Category::find($category->id)->articles()->with('category')->paginate();
+            $articles = Category::find($category->id)
+                ->articles()
+                ->with(['category', 'user:id,name,picture'])
+                ->paginate()
+            ;
 
             return response()->json([
                 'meta' => [
@@ -48,6 +52,6 @@ class CategoryController extends Controller
             ],
             'data' => [],
         ], 404);
-        
+
     }
 }
