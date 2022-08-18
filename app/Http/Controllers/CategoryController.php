@@ -27,7 +27,7 @@ class CategoryController extends Controller
 
         if ($category)
         {
-            $articles = Category::find($category->id)->articles()->get();
+            $articles = Category::find($category->id)->articles()->with('category')->paginate();
 
             return response()->json([
                 'meta' => [
@@ -35,13 +35,7 @@ class CategoryController extends Controller
                     'status' => 'success',
                     'message' => 'Articles fetched successfully.',
                 ],
-                'data' => [
-                    'category' => [
-                        'name' => $category->name,
-                        'slug' => $category->slug,
-                    ],
-                    'articles' => $articles,
-                ],
+                'data' => $articles,
             ]);
 
         }
