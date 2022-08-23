@@ -20,6 +20,7 @@ class ProfileController extends Controller
                 'message' => 'User data fetched successfully.',
             ],
             'data' => [
+                'email' => $user->email,
                 'name' => $user->name,
                 'picture' => $user->picture,
             ],
@@ -44,6 +45,7 @@ class ProfileController extends Controller
                 'message' => 'User data updated successfully.',
             ],
             'data' => [
+                'email' => $user->email,
                 'name' => $user->name,
                 'picture' => $user->picture,
             ],
