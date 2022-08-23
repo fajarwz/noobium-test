@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use App\Models\Article;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -46,6 +47,13 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    protected function picture(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => strpos($value, env('AVATAR_GENERATOR_URL')) === false ? env('APP_URL') . '/storage/' . $value : $value,
+        );
+    }
     
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
