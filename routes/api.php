@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Me\ArticleController as MeArticleController;
 use App\Http\Controllers\Me\CategoryController as MeCategoryController;
@@ -21,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/sign-up', [AuthController::class, 'signUp'])->name('sign-up');
 Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign-in');
+
+Route::get('/google/sign-in', [GoogleAuthController::class, 'redirectToGoogle']);
+Route::get('/google/sign-in-callback', [GoogleAuthController::class, 'signInCallback']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{categorySlug}', [CategoryController::class, 'show']);
