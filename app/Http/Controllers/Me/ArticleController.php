@@ -8,6 +8,7 @@ use App\Http\Requests\Me\Article\UpdateRequest;
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Support\Str;
+use ImageKit\ImageKit;
 
 class ArticleController extends Controller
 {
@@ -39,7 +40,21 @@ class ArticleController extends Controller
         $validated['slug'] = Str::of($validated['title'])->slug('-') . '-' . time();
         $validated['content_preview'] = substr($validated['content'], 0, 218) . '...';
 
-        $validated['featured_image'] = $request->file('featured_image')->store('article/featured-image', 'public');
+        $imageKit = new ImageKit(
+            env('IMAGEKIT_PUBLIC_KEY'),
+            env('IMAGEKIT_PRIVATE_KEY'),
+            env('IMAGEKIT_URL_ENDPOINT'),
+        );
+
+        $image = base64_encode(file_get_contents($request->file('featured_image')));
+        
+        $uploadImage = $imageKit->uploadFile([
+            'file' => $image,
+            'fileName' => $validated['slug'],
+            'folder' => '/articles', 
+        ]);
+
+        $validated['featured_image'] = $uploadImage->result->url;
 
         $createArticle = User::find($userId)->articles()->create($validated);
 
@@ -115,7 +130,21 @@ class ArticleController extends Controller
 
         if ($request->hasFile('featured_image'))
         {
-            $validated['featured_image'] = $request->file('featured_image')->store('article/featured-image', 'public');
+            $imageKit = new ImageKit(
+                env('IMAGEKIT_PUBLIC_KEY'),
+                env('IMAGEKIT_PRIVATE_KEY'),
+                env('IMAGEKIT_URL_ENDPOINT'),
+            );
+    
+            $image = base64_encode(file_get_contents($request->file('featured_image')));
+            
+            $uploadImage = $imageKit->uploadFile([
+                'file' => $image,
+                'fileName' => $validated['slug'],
+                'folder' => '/articles', 
+            ]);
+    
+            $validated['featured_image'] = $uploadImage->result->url;
         }
 
         $article = Article::find($id);

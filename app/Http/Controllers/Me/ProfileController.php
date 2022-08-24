@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Me\Profile\UpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use ImageKit\ImageKit;
 
 class ProfileController extends Controller
 {
@@ -31,10 +32,26 @@ class ProfileController extends Controller
     {
         $validated = $request->validated();
 
-        if($request->hasFile('picture'))
-            $validated['picture'] = $request->file('picture')->store('profile-pictures', 'public');
-
         $user = User::find(auth()->id());
+
+        if($request->hasFile('picture'))
+        {
+            $imageKit = new ImageKit(
+                env('IMAGEKIT_PUBLIC_KEY'),
+                env('IMAGEKIT_PRIVATE_KEY'),
+                env('IMAGEKIT_URL_ENDPOINT'),
+            );
+    
+            $image = base64_encode(file_get_contents($request->file('picture')));
+            
+            $uploadImage = $imageKit->uploadFile([
+                'file' => $image,
+                'fileName' => $user->email,
+                'folder' => '/users', 
+            ]);
+    
+            $validated['picture'] = $uploadImage->result->url;
+        }
 
         $update = $user->update($validated);
 
