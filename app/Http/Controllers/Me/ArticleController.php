@@ -34,9 +34,8 @@ class ArticleController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $userId = auth()->id();
         $validated = $request->validated();
-
+        
         $validated['slug'] = Str::of($validated['title'])->slug('-') . '-' . time();
         $validated['content_preview'] = substr($validated['content'], 0, 218) . '...';
 
@@ -45,7 +44,7 @@ class ArticleController extends Controller
             env('IMAGEKIT_PRIVATE_KEY'),
             env('IMAGEKIT_URL_ENDPOINT'),
         );
-
+        
         $image = base64_encode(file_get_contents($request->file('featured_image')));
         
         $uploadImage = $imageKit->uploadFile([
@@ -53,8 +52,10 @@ class ArticleController extends Controller
             'fileName' => $validated['slug'],
             'folder' => '/articles', 
         ]);
-
+        
         $validated['featured_image'] = $uploadImage->result->url;
+        
+        $userId = auth()->id();
 
         $createArticle = User::find($userId)->articles()->create($validated);
 
@@ -83,10 +84,11 @@ class ArticleController extends Controller
     public function show($id)
     {
         $article = Article::with(['category', 'user:id,name,picture'])->find($id);
-        $userId = auth()->id();
-
+        
         if ($article)
         {
+            $userId = auth()->id();
+            
             if ($article->user_id === $userId)
             {
                 return response()->json([
@@ -122,37 +124,38 @@ class ArticleController extends Controller
 
     public function update(UpdateRequest $request, $id)
     {
-        $userId = auth()->id();
-        $validated = $request->validated();
-
-        $validated['slug'] = Str::of($validated['title'])->slug('-') . '-' . time();
-        $validated['content_preview'] = substr($validated['content'], 0, 218) . '...';
-
-        if ($request->hasFile('featured_image'))
-        {
-            $imageKit = new ImageKit(
-                env('IMAGEKIT_PUBLIC_KEY'),
-                env('IMAGEKIT_PRIVATE_KEY'),
-                env('IMAGEKIT_URL_ENDPOINT'),
-            );
-    
-            $image = base64_encode(file_get_contents($request->file('featured_image')));
-            
-            $uploadImage = $imageKit->uploadFile([
-                'file' => $image,
-                'fileName' => $validated['slug'],
-                'folder' => '/articles', 
-            ]);
-    
-            $validated['featured_image'] = $uploadImage->result->url;
-        }
-
         $article = Article::find($id);
 
         if ($article)
         {
+            $userId = auth()->id();
+
             if ($article->user_id === $userId)
             {
+                $validated = $request->validated();
+
+                $validated['slug'] = Str::of($validated['title'])->slug('-') . '-' . time();
+                $validated['content_preview'] = substr($validated['content'], 0, 218) . '...';
+
+                if ($request->hasFile('featured_image'))
+                {
+                    $imageKit = new ImageKit(
+                        env('IMAGEKIT_PUBLIC_KEY'),
+                        env('IMAGEKIT_PRIVATE_KEY'),
+                        env('IMAGEKIT_URL_ENDPOINT'),
+                    );
+            
+                    $image = base64_encode(file_get_contents($request->file('featured_image')));
+                    
+                    $uploadImage = $imageKit->uploadFile([
+                        'file' => $image,
+                        'fileName' => $validated['slug'],
+                        'folder' => '/articles', 
+                    ]);
+            
+                    $validated['featured_image'] = $uploadImage->result->url;
+                }
+
                 $updateArticle = $article->update($validated);
 
                 if ($updateArticle)
@@ -200,11 +203,12 @@ class ArticleController extends Controller
 
     public function destroy($id)
     {
-        $userId = auth()->id();
         $article = Article::find($id);
 
         if ($article)
         {
+            $userId = auth()->id();
+
             if ($article->user_id === $userId)
             {
                 $deleteArticle = $article->delete();

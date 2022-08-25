@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Me\ArticleController as MeArticleController;
-use App\Http\Controllers\Me\CategoryController as MeCategoryController;
 use App\Http\Controllers\Me\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,8 +37,6 @@ Route::middleware('auth:api')->group(function ()
     {
         Route::get('/profile', [ProfileController::class, 'show']);
         Route::put('/profile', [ProfileController::class, 'update']);
-
-        Route::get('/categories', [MeCategoryController::class, 'index']);
 
         Route::apiResource('articles', MeArticleController::class);
     });

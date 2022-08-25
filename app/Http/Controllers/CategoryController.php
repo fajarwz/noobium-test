@@ -9,7 +9,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::get(['name', 'slug']);
+        $categories = Category::all();
 
         return response()->json([
             'meta' => [
@@ -31,7 +31,7 @@ class CategoryController extends Controller
                 ->articles()
                 ->with(['category', 'user:id,name,picture'])
                 ->select([
-                    'user_id', 'category_id', 'title', 'slug', 'content_preview', 'featured_image', 'created_at', 'updated_at'
+                    'id', 'user_id', 'category_id', 'title', 'slug', 'content_preview', 'featured_image', 'created_at', 'updated_at'
                 ])
                 ->paginate()
             ;
