@@ -22,8 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/sign-up', [AuthController::class, 'signUp'])->name('sign-up');
 Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign-in');
 
-Route::get('/google/sign-in', [GoogleAuthController::class, 'redirectToGoogle']);
-Route::get('/google/sign-in-callback', [GoogleAuthController::class, 'signInCallback']);
+Route::get('/sign-in/google/get-url', [GoogleAuthController::class, 'getUrl']);
+Route::get('/sign-in/google/callback', [GoogleAuthController::class, 'callback']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{categorySlug}', [CategoryController::class, 'show']);

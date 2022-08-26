@@ -7,7 +7,7 @@ use Socialite;
 
 class GoogleAuthController extends Controller
 {
-    public function redirectToGoogle()
+    public function getUrl()
     {
         return response()->json([
             'meta' => [
@@ -21,7 +21,7 @@ class GoogleAuthController extends Controller
         ]);
     }
 
-    public function signInCallback()
+    public function callback()
     {
         $user = Socialite::driver('google')->with(['access_type' => 'offline'])->stateless()->user();
 
