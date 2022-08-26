@@ -9,12 +9,21 @@ class GoogleAuthController extends Controller
 {
     public function redirectToGoogle()
     {
-        return Socialite::driver('google')->stateless()->redirect();
+        return response()->json([
+            'meta' => [
+                'code' => 200,
+                'status' => 'success',
+                'message' => 'Google Sign In Url fetched successfully.',
+            ],
+            'data' => [
+                'url' => Socialite::driver('google')->stateless()->redirect()->getTargetUrl(),
+            ],
+        ]);
     }
 
     public function signInCallback()
     {
-        $user = Socialite::driver('google')->stateless()->user();
+        $user = Socialite::driver('google')->with(['access_type' => 'offline'])->stateless()->user();
 
         if (!$user)
         {
@@ -25,7 +34,7 @@ class GoogleAuthController extends Controller
                     'message' => 'Login with Google failed.',
                 ],
                 'data' => [],
-            ]);
+            ], 500);
         }
 
         $finduser = User::where('social_id', $user->id)->first();
@@ -96,6 +105,6 @@ class GoogleAuthController extends Controller
                 'message' => 'Login with Google failed.',
             ],
             'data' => [],
-        ]);
+        ], 500);
     }
 }
