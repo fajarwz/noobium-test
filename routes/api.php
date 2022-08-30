@@ -24,6 +24,7 @@ Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign-in');
 
 Route::get('/sign-in/google/get-url', [GoogleAuthController::class, 'getUrl']);
 Route::get('/sign-in/google/callback', [GoogleAuthController::class, 'callback']);
+Route::get('/sign-in/google/with-token/{token}', [GoogleAuthController::class, 'withToken']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{categorySlug}', [CategoryController::class, 'show']);
