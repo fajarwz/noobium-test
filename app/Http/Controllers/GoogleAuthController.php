@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class GoogleAuthController extends Controller
 {
-    public function signIn($token)
+    public function signIn(Request $request)
     {
-        $tokenParts = explode('.', $token);
+        $request = $request->json()->all();
+
+        $tokenParts = explode('.', $request['token']);
 
         $tokenPayload = base64_decode($tokenParts[1]);
 

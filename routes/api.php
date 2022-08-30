@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/sign-up', [AuthController::class, 'signUp'])->name('sign-up');
 Route::post('/sign-in', [AuthController::class, 'signIn'])->name('sign-in');
 
-Route::get('/sign-in/google/{token}', [GoogleAuthController::class, 'signIn']);
+Route::post('/sign-in/google', [GoogleAuthController::class, 'signIn']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{categorySlug}', [CategoryController::class, 'show']);
