@@ -42,3 +42,5 @@ Route::middleware('auth:api')->group(function ()
 
     Route::post('/sign-out', [AuthController::class, 'signOut']);
 });
+
+Route::middleware('jwt.refresh')->post('/refresh', [AuthController::class, 'refresh']);
