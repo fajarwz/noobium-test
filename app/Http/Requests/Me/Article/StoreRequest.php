@@ -30,9 +30,9 @@ class StoreRequest extends FormRequest
     {
         return [
             'category_id' => 'required|' . Rule::in(Category::pluck('id')),
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:190',
             'content' => 'required|string',
-            'featured_image' => 'required|image|mimes:jpg,bmp,png',
+            'featured_image' => 'required|image|mimes:jpg,jpeg,bmp,png',
         ];
     }
 
