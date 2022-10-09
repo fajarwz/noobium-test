@@ -20,6 +20,7 @@ class ArticleController extends Controller
             'id', 'user_id', 'category_id', 'title', 'slug', 'content_preview', 'featured_image', 'created_at', 'updated_at'
         ])
             ->where('user_id', $userId)
+            ->orderByDesc('updated_at')
             ->paginate();
 
         return response()->json([

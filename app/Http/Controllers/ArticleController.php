@@ -18,6 +18,7 @@ class ArticleController extends Controller
                     'id', 'user_id', 'category_id', 'title', 'slug', 'content_preview', 'featured_image', 'created_at', 'updated_at'
                 ])
                 ->where('title', 'like', '%' . $searchQuery . '%')
+                ->orderByDesc('updated_at')
                 ->paginate()
             ;
         }
@@ -27,6 +28,7 @@ class ArticleController extends Controller
                 ->select([
                     'id', 'user_id', 'category_id', 'title', 'slug', 'content_preview', 'featured_image', 'created_at', 'updated_at'
                 ])
+                ->orderByDesc('updated_at')
                 ->paginate()
             ;
         }
