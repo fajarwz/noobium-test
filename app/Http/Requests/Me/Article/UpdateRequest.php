@@ -30,9 +30,9 @@ class UpdateRequest extends FormRequest
     {
         return [
             'category_id' => 'required|' . Rule::in(Category::pluck('id')),
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:190',
             'content' => 'required|string',
-            'featured_image' => 'nullable|image|mimes:jpg,bmp,png',
+            'featured_image' => 'nullable|image|mimes:jpg,jpeg,bmp,png',
         ];
     }
 
